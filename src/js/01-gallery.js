@@ -27,14 +27,22 @@ function maximize(e) {
   const targetClasses = e.target.classList;
   if (targetClasses.contains("gallery__image")) {
     e.preventDefault();
+
     const source = e.target.dataset.source;
 
-    basicLightbox
-      .create(
-        `
+    const instance = basicLightbox.create(
+      `
           <img width="1400" height="900" src="${source}">
       `
-      )
-      .show();
+    );
+
+    instance.show();
+    document.addEventListener("keydown", function closeLightboxOnEscape(e) {
+      if (e.keyCode === 27) {
+        instance.close();
+        // Remove the event listener once the lightbox is closed:
+        document.removeEventListener("keydown", closeLightboxOnEscape);
+      }
+    });
   }
 }
