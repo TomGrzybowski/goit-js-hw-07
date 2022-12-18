@@ -22,6 +22,7 @@ galleryItems.forEach((el) => {
 });
 
 gallery.addEventListener("click", maximize);
+
 //Handling clicking on picture
 function maximize(e) {
   const targetClasses = e.target.classList;
@@ -33,16 +34,24 @@ function maximize(e) {
     const instance = basicLightbox.create(
       `
           <img width="1400" height="900" src="${source}">
-      `
+      `,
+      {
+        onClose: (instance) => {
+          document.removeEventListener("keydown", closeLightboxOnEscape);
+        },
+      }
     );
 
     instance.show();
-    document.addEventListener("keydown", function closeLightboxOnEscape(e) {
+    document.addEventListener("keydown", closeLightboxOnEscape);
+
+    function closeLightboxOnEscape(e) {
       if (e.keyCode === 27) {
         instance.close();
+        console.log("test");
         // Remove the event listener once the lightbox is closed:
         document.removeEventListener("keydown", closeLightboxOnEscape);
       }
-    });
+    }
   }
 }
